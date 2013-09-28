@@ -1,0 +1,47 @@
+<!doctype html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en"><![endif]-->
+<!--[if gt IE 8]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+    <meta charset="utf-8" />
+    <title>Gamesopedia</title>
+    <?php //echo $this->headTitle() ?>
+    <meta name="description" content="" />
+    <meta name="author" content="Sherzod Odinaev" />
+    <meta name="viewport" content="width=device-width; initial-scale=1.0" />
+    <link rel="stylesheet" href="<?php echo $this->basePath()?>/css/normalize.css" />
+    <link rel="stylesheet" href="<?php echo $this->basePath()?>/css/foundation.min.css" />
+    <link rel="stylesheet" href="<?php echo $this->basePath()?>/css/jquery-ui-1.10.3.custom.min.css" />
+
+    <script src="<?php echo $this->basePath()?>/js/html5.js"></script>
+    <script src="<?php echo $this->basePath()?>/js/custom.modernizr.js"></script>
+    <script src="<?php echo $this->basePath()?>/js/jquery.min.js"></script>
+    <script src="<?php echo $this->basePath()?>/js/jquery-ui-1.10.3.custom.min.js"></script>
+    <script src="<?php echo $this->basePath()?>/js/foundation.min.js"></script>
+    <script src="<?php echo $this->basePath()?>/js/scripts.js"></script>
+</head>
+
+<body class="antialiased">
+<?php echo $this->partial('partial/menu'); ?>
+<div class="row">
+    <div class="large-12 columns">
+        <?php echo $this->content; ?>
+    </div>
+</div>
+
+<footer class="row">
+    <center>
+    <div class="large-12 columns">
+        <h6 class="subheader">&copy; <?php echo date('Y'); ?> Gamesopedia.</h6>
+    </div>
+    </center>
+</footer>
+<?php echo $this->alert()->render() ?>
+
+<?php echo $this->inlineScript() ?>
+<div id="main-modal" class="reveal-modal">
+    <h3 id="main-modal-header"></h3>
+    <p id="main-modal-content"></p>
+    <a class="close-reveal-modal">&#215;</a>
+</div>
+</body>
+</html>

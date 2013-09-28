@@ -1,0 +1,23 @@
+{
+    "require": {
+        "php": ">=5.3.3",
+        "symfony/console": "2.*",
+        "symfony/process": "2.*",
+        "symfony/yaml": "2.1",
+        "symfony/finder": "2.1",
+        "zendframework/zendframework": ">2.1.3",
+        "kriswallsmith/assetic": "1.1.*@dev",
+        "itbz/fpdf": "dev-master"
+    },
+    "autoload": {
+            "psr-0": {
+                "Falcon": "src",
+		"Application": "module/Application/src",
+                "Administration": "module/Administration/src"
+            }
+    },
+    "config": {
+        "bin-dir": "./bin/",
+        "vendor-dir": "./vendor/"
+    }
+}

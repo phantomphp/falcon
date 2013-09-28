@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit bootstrap="bootstrap.php" colors="true">
+    <!-- ALL TEST SUITES -->
+    <testsuites>
+        <testsuite name="Falcon">
+           <directory suffix=".php">./Falcon</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>

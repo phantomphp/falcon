@@ -1,0 +1,63 @@
+<?php
+$auth = $this->getHelperPluginManager()->getServiceLocator()->get('ZendAuthService');
+$html = '';
+if ($auth->hasIdentity()) {
+    $routeMatch = $controller = $this->getHelperPluginManager()->getServiceLocator()->get('Application')->getMvcEvent()->getRouteMatch();
+    if ($routeMatch) {
+
+        $allMenus = array(
+            'left' => array(
+                array('label' => 'Reports', 'url' => '#', 'sub' => array(
+                    array('label' => 'ROI', 'url' => '/report/index/roi'),
+                    array('label' => 'eDocs', 'url' => '/report/index/edocs'),
+                    array('label' => 'Scholarship', 'url' => '/report/index/scholarship'),
+                    array('label' => 'Senior Data', 'url' => '/report/index/senior'),
+                    array('label' => 'Student Usage', 'url' => '/report/index/student-usage'),
+                )),
+                array('label' => 'Charts', 'url' => '#', 'sub' => array(
+                    array('label' => 'Geo::US', 'url' => '/application/chart/geous'),
+                    array('label' => 'Geo::World', 'url' => '/application/chart/geoworld'),
+                    array('label' => 'Accounts', 'url' => '/application/chart/account'),
+                )),
+            ),
+            'right' => array(
+                array('label' => 'Logout', 'url' => '/logout')
+            )
+        );
+
+        foreach ($allMenus as $placement => $menus) {
+            foreach ($menus as $menu) {
+                $html .= '<ul class="'.$placement.'">';
+                $html .= '<li class="divider"></li>';
+                $html .= '<li'.(isset($menu['sub']) ? ' class="has-dropdown"' : '').'>';
+                $html .= '<a href="' . $this->basePath($menu['url']) . '">' . $menu['label'] . '</a>';
+                if (isset($menu['sub'])) {
+                    $html .= '<ul class="dropdown">';
+                    foreach ($menu['sub'] as $subItems) {
+                        $html .= '<li class="divider"></li>';
+                        $html .= '<li><a href="'.$subItems['url'].'">' . $subItems['label'] . '</a></li>';
+                    }
+                    $html .= '</ul>';
+                }
+                $html .= '</li>';
+                $html .= '</ul>';
+            }
+        }
+    }
+}
+?>
+        <nav class="top-bar">
+            <ul class="title-area">
+                <li class="name">
+                    <h1><a href="<?php echo $this->basePath('/') ?>">Main</a></h1>
+                </li>
+                <?php if ($html) :?>
+                <li class="toggle-topbar menu-icon"><a href="#"><span></span></a></li>
+                <?php endif; ?>
+            </ul>
+            <?php if ($html) :?>
+            <section class="top-bar-section">
+                <?php echo $html; ?>
+            </section>
+            <?php endif; ?>
+        </nav>

@@ -1,0 +1,17 @@
+# person
+
+create table `person`(
+    `id` int unsigned not null auto_increment,
+    `uuid` varchar(36) NOT NULL,
+    `firstname` varchar(64),
+    `middlename` varchar(64),
+    `lastname` varchar(64),
+    `gender` tinyint not null default 0,
+    `dob` datetime null default null,
+    `active` tinyint unsigned not null default 1,
+    `deleted` tinyint unsigned not null default 0,
+    `created_date` timestamp NULL DEFAULT NULL,
+    `modified_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    KEY (`uuid`)
+) ENGINE=INNODB;
