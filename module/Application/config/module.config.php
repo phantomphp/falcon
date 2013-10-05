@@ -75,5 +75,12 @@ return array(
     ),
     'log' => array(
         'log-path' => '/tmp/falcon.log'
+    ),
+    'db' => array(
+        'driver' => 'Mysqli',
+        'hostname' => 'localhost',
+        'username' => 'falcon',
+        'password' => 'password',
+        'database' => 'falcon',
     )
 );

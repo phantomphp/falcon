@@ -16,6 +16,7 @@ use Zend\EventManager\StaticEventManager;
 use Zend\Log\Logger;
 use Zend\Log\Writer\Stream as LogStream;
 use Zend\Db\Adapter\Adapter;
+use Falcon\ServiceManager;
 
 class Module
 {
@@ -35,8 +36,8 @@ class Module
         $identityPlugin = $sm->get('ControllerPluginManager')->get('identity');
         $authService = new AuthenticationService();
         $identityPlugin->setAuthenticationService($authService);
-
         $this->preDispatch($e);
+		ServiceManager::setConfig($this->getConfig());
     }
 
     public function getConfig()
@@ -72,7 +73,10 @@ class Module
                     $log->addWriter($writer);
                     return $log;
                 },
-
+				'DbAuthAdapter' => function($sm) {
+					$userRepo = ServiceManager::get('User\UserRepo');
+					return new Authentication\DbAuthAdapter($userRepo);
+				},
             )
         );
     }
