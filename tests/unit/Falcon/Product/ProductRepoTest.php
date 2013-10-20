@@ -11,6 +11,12 @@ class ProductRepoTest extends ServiceManagerProviderTestCase
     const ID = 1;
     const UUID = '424422df-13cd-11e3-b252-080027150945';
     const NAME = 'Chess';
+    const YEAR = 2013;
+    const DESIGNER = 'Boss';
+    const PUBLISHER = 'Penguin';
+    const SKU = '009232';
+    const UPC = 'dadas-d0asdsa';
+    const MSRP = 9983.89;
     const ACTIVE = 1;
     const DELETED = 0;
     const CREATED_DATE = '2013-09-01 23:00:00';
@@ -53,6 +59,12 @@ class ProductRepoTest extends ServiceManagerProviderTestCase
             'id' => self::ID,
             'uuid' => self::UUID,
             'name' => self::NAME,
+            'year' => self::YEAR,
+            'designer' => self::DESIGNER,
+            'publisher' => self::PUBLISHER,
+            'sku' => self::SKU,
+            'upc' => self::UPC,
+            'msrp' => self::MSRP,
             'active' => self::ACTIVE,
             'deleted' => self::DELETED,
             'created_date' => self::CREATED_DATE,
@@ -65,7 +77,15 @@ class ProductRepoTest extends ServiceManagerProviderTestCase
     public function testGetProductById()
     {
         $repo = $this->get('Product\ProductRepo');
-        $expected = new Product(self::ID, self::UUID, self::NAME);
+        $expected = new Product(self::ID, self::UUID, array(
+            'name' => self::NAME,
+            'year' => self::YEAR,
+            'designer' => self::DESIGNER,
+            'publisher' => self::PUBLISHER,
+            'sku' => self::SKU,
+            'upc' => self::UPC,
+            'msrp' => self::MSRP,
+        ));
         $expected->setActive(self::ACTIVE);
         $expected->setDeleted(self::DELETED);
         $expected->setCreatedDate(self::CREATED_DATE);
@@ -79,17 +99,22 @@ class ProductRepoTest extends ServiceManagerProviderTestCase
     {
         $repo = $this->get('Product\ProductRepo');
         $name = 'kinder';
-        $product = $repo->create($name);
-        $this->assertSame($name, $product->getName());
+        $product = $repo->create(array('name' => $name));
+        $this->assertSame($name, $product->get('name'));
         $this->assertTrue($product->isActive());
     }
 
     public function testUpdateProduct()
     {
+        
+    }
+
+    public function testSaveProduct()
+    {
         $repo = $this->get('Product\ProductRepo');
         $product = $repo->getProductById(self::ID);
-        $product->setName('Monopoly');
-        $repo->update($product);
+        $product->set('name', 'Monopoly');
+        $repo->save($product);
         $actual = $repo->getProductById(self::ID);
         $this->assertEquals($product, $actual);
     }

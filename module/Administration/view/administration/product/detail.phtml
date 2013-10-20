@@ -1,0 +1,96 @@
+<?php
+$product = $this->product;
+$attributes = $this->attributes;
+?>
+<h3><?php echo $product->get('name'); ?> <small><a href="/administration/product/edit/<?php echo $product->getUUID(); ?>" class=""><i class="icon-edit-sign"></i></a></small></h3>
+<div class="row">
+    <div class="large-2 columns">
+        <label for="name" class="inline">Year:</label>
+    </div>
+    <div class="large-4 columns">
+        <?php echo $this->isempty($product->get('year')); ?>
+    </div>
+    <div class="large-6 columns"></div>
+</div>
+<div class="row">
+    <div class="large-2 columns">
+        <label for="name" class="inline">Designer:</label>
+    </div>
+    <div class="large-10 columns">
+        <?php echo $this->isempty($product->get('designer')); ?>
+    </div>
+</div>
+<div class="row">
+    <div class="large-2 columns">
+        <label for="name" class="inline">Publisher:</label>
+    </div>
+    <div class="large-10 columns">
+        <?php echo $this->isempty($product->get('publisher')); ?>
+    </div>
+</div>
+<div class="row">
+    <div class="large-2 columns">
+        <label for="name" class="inline">SKU:</label>
+    </div>
+    <div class="large-4 columns">
+        <?php echo $this->isempty($product->get('sku')); ?>
+    </div>
+    <div class="large-6 columns"></div>
+</div>
+<div class="row">
+    <div class="large-2 columns">
+        <label for="name" class="inline">UPC:</label>
+    </div>
+    <div class="large-4 columns">
+        <?php echo $this->isempty($product->get('upc')); ?>
+    </div>
+    <div class="large-6 columns"></div>
+</div>
+<div class="row">
+    <div class="large-2 columns">
+        <label for="name" class="inline">MSRP:</label>
+    </div>
+    <div class="large-4 columns">
+        <?php echo $this->isempty($product->get('msrp')); ?>
+    </div>
+    <div class="large-6 columns"></div>
+</div>
+<?php foreach ($this->attributes as $attribute) : ?>
+<div class="row attributes">
+    <div class="large-2 columns">
+        <label for="name" class="inline"><?php echo $attribute->getLabel() ?>:</label>
+    </div>
+    <div class="large-10 columns">
+    <?php 
+        switch ($attribute->getType()) {
+            case Falcon\Product\ProductAttribute::TYPE_TEXT:
+            case Falcon\Product\ProductAttribute::TYPE_TEXTAREA:
+            case Falcon\Product\ProductAttribute::TYPE_SELECT:
+                echo $this->isempty($product->getAttribute($attribute->getId()));
+                break;
+
+            case Falcon\Product\ProductAttribute::TYPE_SET:
+                if ($attribute->hasChildren()) {
+                    foreach ($attribute->getChildren() as $child) {
+                        $val = null;
+                        //for now we assume that set may have only radio or checkbox
+                        if ($child->getType() == Falcon\Product\ProductAttribute::TYPE_RADIO) {
+                            $selected = $product->getAttribute($attribute->getId());
+                            if ($selected == $child->getId()) {
+                                $val = '<span class="radius secondary label">' . $child->getLabel() . '</span>';
+                            }
+                        } else {
+                            $selected = $product->getAttribute($child->getId());
+                            if ($selected) {
+                                $val = '<span class="radius secondary label">' . $child->getLabel() . '</span> &nbsp;';
+                            }
+                        }
+                        echo $this->isempty($val, 'none');
+                    }
+                }
+                break;
+        }
+    ?>
+    </div>
+</div>
+<?php endforeach; ?>

@@ -8,18 +8,11 @@
  */
 
 return array(
-    'service_manager' => array(
-        'factories' => array(
-            //'translator' => 'Zend\I18n\Translator\TranslatorServiceFactory',
-        ),
-        'aliases' => array(
-
-        ),
-    ),
     'controllers' => array(
         'invokables' => array(
             'Administration\Controller\Secure' => 'Administration\Controller\SecureController',
             'Administration\Controller\Index' => 'Administration\Controller\IndexController',
+            'Administration\Controller\Product' => 'Administration\Controller\ProductController',
         ),
     ),
     'view_manager' => array(
@@ -29,8 +22,8 @@ return array(
         'not_found_template'       => 'error/404',
         'exception_template'       => 'error/index',
         'template_map' => array(
-            'layout/layout'           => __DIR__ . '/../view/layout/layout.phtml',
-            'partial/menu'             => __DIR__ . '/../view/partial/menu.phtml',
+            'layout/admin-layout'           => __DIR__ . '/../view/layout/layout.phtml',
+            'partial/administration-menu'             => __DIR__ . '/../view/partial/menu.phtml',
             'administration/index/index' => __DIR__ . '/../view/administration/index/index.phtml',
             'error/404'               => __DIR__ . '/../view/error/404.phtml',
             'error/index'             => __DIR__ . '/../view/error/index.phtml',
@@ -41,11 +34,11 @@ return array(
     ),
     'view_helpers' => array(
         'invokables' => array(
-            'alert' => 'Application\View\Helper\Alert',
-            'partial' => 'Zend\View\Helper\Partial'
+            'isempty' => 'Administration\View\Helper\IsEmpty',
         ),
     ),
-    'log' => array(
-        'log-path' => '/tmp/falcon.log'
-    )
+    'module_layouts' => array(
+        'Administration' => 'layout/admin-layout'
+    ),
+
 );

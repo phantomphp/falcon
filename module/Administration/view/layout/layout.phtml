@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="<?php echo $this->basePath()?>/css/normalize.css" />
     <link rel="stylesheet" href="<?php echo $this->basePath()?>/css/foundation.min.css" />
     <link rel="stylesheet" href="<?php echo $this->basePath()?>/css/jquery-ui-1.10.3.custom.min.css" />
+    <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+
 
     <script src="<?php echo $this->basePath()?>/js/html5.js"></script>
     <script src="<?php echo $this->basePath()?>/js/custom.modernizr.js"></script>
@@ -21,7 +23,7 @@
 </head>
 
 <body class="antialiased">
-<?php echo $this->partial('partial/menu'); ?>
+<?php echo $this->partial('partial/administration-menu'); ?>
 <div class="row">
     <div class="large-12 columns">
         <?php echo $this->content; ?>

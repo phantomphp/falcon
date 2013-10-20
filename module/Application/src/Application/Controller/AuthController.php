@@ -28,7 +28,11 @@ class AuthController extends AbstractActionController
                 $this->redirect()->toRoute('login');
             } else {
                 //$this->getServiceLocator()->get('log')->info('Logged in: ' . $this->getRequest()->getPost('username'));
-                $this->redirect()->toUrl('/');
+                if ($result->getIdentity()->isAdmin()) {
+                    $this->redirect()->toUrl('/administration');
+                } else {
+                    $this->redirect()->toUrl('/');
+                }
             }
         }
 

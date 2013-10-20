@@ -1,5 +1,5 @@
 <?php
-define('CONFIG_DIR', realpath(__DIR__ . '/../../config'));
+define('CONFIG_DIR', realpath(__DIR__ . '/config'));
 require __DIR__ . '/../../vendor/autoload.php';
 $paths = array(
     get_include_path(),

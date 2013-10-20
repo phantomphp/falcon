@@ -2,6 +2,8 @@
 
 namespace Falcon;
 
+use Falcon\Repository\RepositoryAwareInterface;
+
 class ServiceManagerProviderTestCase extends \PHPUnit_Framework_TestCase
 {
     public function setUp()
@@ -12,7 +14,12 @@ class ServiceManagerProviderTestCase extends \PHPUnit_Framework_TestCase
 
     public function get($instance)
     {
-        return ServiceManager::get($instance);
+        $class = ServiceManager::get($instance);
+        if ($class instanceof RepositoryAwareInterface) {
+            $class->setRepository($this->getDb());
+        }
+        
+        return $class;
     }
 
     public function getDb()

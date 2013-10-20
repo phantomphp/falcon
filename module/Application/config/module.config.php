@@ -67,6 +67,9 @@ return array(
             __DIR__ . '/../view',
         ),
     ),
+    'module_layouts' => array(
+        'Application' => 'layout/layout'
+    ),
     'view_helpers' => array(
         'invokables' => array(
             'alert' => 'Application\View\Helper\Alert',

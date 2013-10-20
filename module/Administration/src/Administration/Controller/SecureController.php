@@ -20,6 +20,12 @@ class SecureController extends AbstractActionController
     public function onDispatch(MvcEvent $e)
     {
         parent::onDispatch($e);
+        if (!$this->identity()) {
+            $this->flashMessenger()->addInfoMessage('You need to login first.');
+            $this->redirect()->toUrl('login');
+        } elseif (!$this->identity()->isAdmin()) {
+            $this->redirect()->toUrl('/');
+        }
     }
 
 }

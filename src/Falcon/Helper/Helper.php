@@ -14,4 +14,9 @@ class Helper
             . substr($token, 16, 4) . '-'
             . substr($token, 20, 12);
     }
+    
+    public static function validateUUID($uuid)
+    {
+        return (bool)preg_match('/^[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12}$/i', $uuid);
+    }
 }

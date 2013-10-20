@@ -2,29 +2,39 @@
 
 namespace Falcon\Product;
 
-use Falcon\Model\ModelAbstract;
+use Falcon\Model\LazyModelAbstract;
 
-class Product extends ModelAbstract
+class Product extends LazyModelAbstract
 {
-    protected $name;
-
-    public function __construct($id, $uuid, $name)
+    protected $registry = array(
+        'name' => null,
+        'year' => null,
+        'designer' => null,
+        'publisher' => null,
+        'sku' => null,
+        'upc' => null,
+        'msrp' => null
+    );
+    
+    protected $attributes = array();
+    
+    protected $descriptions = array();
+    
+    public function getAttributes()
     {
-        parent::__construct($id, $uuid);
-        if (empty($name)) {
-            throw new \InvalidArgumentException('Product name cannot be empty!');
+        return $this->attributes;
+    }
+    
+    public function getAttribute($key)
+    {
+        if (isset($this->attributes[$key])) {
+            return $this->attributes[$key];
         }
-        $this->name = $name;
     }
-
-    public function getName()
+    
+    public function setAttribute($key, $value)
     {
-        return $this->name;
+        $this->attributes[$key] = $value;
     }
-
-    public function setName($name)
-    {
-        $this->name = $name;
-    }
-
+    
 }

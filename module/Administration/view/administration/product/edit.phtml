@@ -1,0 +1,134 @@
+<?php 
+$product = $this->product;
+?>
+<form class="alert-aware" method="post" action="<?php echo $this->basePath('administration/product/edit')?>">
+    <input type="hidden" name="product[id]" value="<?php echo $product->getId(); ?>" />
+    <input type="hidden" name="product[uuid]" value="<?php echo $product->getUUID(); ?>" />
+    <fieldset>
+        <legend><h3>Edit Product</h3></legend>
+        <div class="row">
+            <div class="large-2 columns">
+                <label for="name" class="inline">Title (required):</label>
+            </div>
+            <div class="large-10 columns">
+                <input type="text" name="product[name]" value="<?php echo $product->get('name'); ?>" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="large-2 columns">
+                <label for="name" class="inline">Year:</label>
+            </div>
+            <div class="large-4 columns">
+                <input type="text" name="product[year]" value="<?php echo $product->get('year'); ?>" />
+            </div>
+            <div class="large-6 columns"></div>
+        </div>
+        <div class="row">
+            <div class="large-2 columns">
+                <label for="name" class="inline">Designer:</label>
+            </div>
+            <div class="large-10 columns">
+                <input type="text" name="product[designer]" value="<?php echo $product->get('designer'); ?>" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="large-2 columns">
+                <label for="name" class="inline">Publisher:</label>
+            </div>
+            <div class="large-10 columns">
+                <input type="text" name="product[publisher]" value="<?php echo $product->get('publisher'); ?>" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="large-2 columns">
+                <label for="name" class="inline">SKU:</label>
+            </div>
+            <div class="large-4 columns">
+                <input type="text" name="product[sku]" value="<?php echo $product->get('sku'); ?>" />
+            </div>
+            <div class="large-6 columns"></div>
+        </div>
+        <div class="row">
+            <div class="large-2 columns">
+                <label for="name" class="inline">UPC:</label>
+            </div>
+            <div class="large-4 columns">
+                <input type="text" name="product[upc]" value="<?php echo $product->get('upc'); ?>" />
+            </div>
+            <div class="large-6 columns"></div>
+        </div>
+        <div class="row">
+            <div class="large-2 columns">
+                <label for="name" class="inline">MSRP:</label>
+            </div>
+            <div class="large-4 columns">
+                <input type="text" name="product[msrp]" value="<?php echo $product->get('msrp'); ?>" />
+            </div>
+            <div class="large-6 columns"></div>
+        </div>
+        <?php foreach ($this->attributes as $attribute) : ?>
+        <div class="row attributes">
+            <div class="large-2 columns">
+                <label for="name" class="inline"><?php echo $attribute->getLabel() ?>:</label>
+            </div>
+            <div class="large-10 columns">
+            <?php 
+                switch ($attribute->getType()) {
+                    case Falcon\Product\ProductAttribute::TYPE_SELECT:
+                        echo '<select name="attribute[' . $attribute->getId() . ']">';
+                        foreach ($attribute->getOptions() as $option) {
+                            $selected = $product->getAttribute($attribute->getId()) == $option ? ' selected="selected"' : '';
+                            echo '<option value="' . $option . '"'. $selected .'>' . $option . '</option>';
+                        }
+                        echo '</select>';
+                        break;
+
+                    case Falcon\Product\ProductAttribute::TYPE_SET:
+                        if ($attribute->hasChildren()) {
+                            foreach ($attribute->getChildren() as $child) {
+                                //for now we assume that set may have only radio or checkbox
+                                if ($child->getType() == Falcon\Product\ProductAttribute::TYPE_RADIO) {
+                                    $type = 'radio';
+                                    $id = $attribute->getId();
+                                    $val = $child->getId();
+                                    $checked = $product->getAttribute($attribute->getId()) == $child->getId() ? ' checked="true"' : '';
+                                } else {
+                                    $type = 'checkbox';
+                                    $id = $child->getId();
+                                    $val = 1;
+                                    $checked = $product->getAttribute($child->getId()) ? ' checked="checked"' : '';
+                                }
+                                echo '<input type="'.$type.'" name="attribute['. $id .']" value="'.$val.'" '. $checked .' /> ';
+                                echo $child->getLabel() . '&nbsp;&nbsp;';
+                            }
+                        }
+                        break;
+
+                    case Falcon\Product\ProductAttribute::TYPE_TEXTAREA:
+                        echo '<textarea name="attribute[' . $attribute->getId() . ']">'. htmlentities($product->getAttribute($attribute->getId())) .'</textarea>';
+                        break;
+
+                    case Falcon\Product\ProductAttribute::TYPE_TEXT:
+                        echo '<input type="text" name="attribute[' . $attribute->getId() . ']" value="'. htmlentities($product->getAttribute($attribute->getId())) .'" />';
+                        break;
+                }
+            ?>
+            </div>
+        </div>
+        <?php endforeach; ?>
+        <div class="row">
+            <div class="large-2 columns">
+                <label for="name" class="inline"></label>
+            </div>
+            <div class="large-10 columns">
+                <button id="submit" class="button radius">Save</button>
+                <button id="cancel" class="button radius" onclick="parent.location.href='/administration/product/index'; return false;">Cancel</button>
+            </div>
+        </div>
+    </fieldset>
+</form>
+<style>
+    .attributes select {
+        width: 50%;
+    }
+</style>
