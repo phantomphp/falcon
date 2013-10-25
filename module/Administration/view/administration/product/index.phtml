@@ -3,6 +3,8 @@
         <thead>
             <tr>
                 <th>Product</th>
+                <th>&nbsp;</th>
+                <th>SKU</th>
                 <th>Category</th>
                 <th>Publisher</th>
                 <th><a href="/administration/product/new" class="tiny radius"> <i class="icon-plus-sign"></i> </a></th>
@@ -15,13 +17,19 @@
                 <a href="/administration/product/detail/<?php echo $product->getUUID(); ?>" class="tiny radius secondary"><?php echo $product->get('name');?></a>
             </td>
             <td>
+                <a href="<?php echo $product->getMainImage($this->basePath())?>"><i class="icon-picture"></i></a>
+            </td>
+            <td>
+                <?php echo $product->get('sku');?>
+            </td>
+            <td>
                 <?php echo $product->getAttribute(1); //TODO convert that into constant ?>
             </td>
             <td>
                 <?php echo $this->isempty($product->get('publisher'), '-'); ?>
             </td>
             <td>
-                <a href="/administration/product/edit/<?php echo $product->getUUID(); ?>" class="tiny radius"> <i class="icon-edit-sign"></i> </a>
+                <a href="/administration/product/edit/<?php echo $product->getUUID(); ?>" class="tiny radius"> <i class="icon-pencil"></i> </a>
                 <a onclick="return confirm('Are you sure?')" href="/administration/product/remove/<?php echo $product->getUUID(); ?>" class="tiny radius"> <i class="icon-remove"></i> </a>
             </td>
         </tr>

@@ -2,3 +2,4 @@ vendor/
 local*
 sync.sh
 bin
+public/img

@@ -1,16 +1,16 @@
 <?php
 
-namespace Falcon\Product;
+namespace Falcon\Product\Attribute;
 
-class ProductAttributeTest extends \PHPUnit_Framework_TestCase
+class AttributeTest extends \PHPUnit_Framework_TestCase
 {
     
     public function testInstance()
     {
         $id = 1;
         $label = 'Degree of freedom';
-        $type = ProductAttribute::TYPE_SET;
-        $attr = new ProductAttribute($id, $label, $type);
+        $type = Attribute::TYPE_SET;
+        $attr = new Attribute($id, $label, $type);
         $this->assertSame($id, $attr->getId());
         $this->assertSame($label, $attr->getLabel());
         $this->assertSame($type, $attr->getType());
@@ -24,8 +24,8 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
         $attr->setValue($value);
         $this->assertSame($value, $attr->getValue());
         $this->assertEmpty($attr->hasChildren());
-        $subAttr1 = new ProductAttribute(2, 'Sub 1', ProductAttribute::TYPE_TEXT);
-        $subAttr2 = new ProductAttribute(3, 'Sub 2', ProductAttribute::TYPE_RADIO);
+        $subAttr1 = new Attribute(2, 'Sub 1', Attribute::TYPE_TEXT);
+        $subAttr2 = new Attribute(3, 'Sub 2', Attribute::TYPE_RADIO);
         $attr->addChild($subAttr1);
         $attr->addChild($subAttr2);
         $this->assertTrue($attr->hasChildren());
@@ -37,6 +37,6 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
      * */
     public function testInvalidTypeThrowsException()
     {
-        $topAttr = new ProductAttribute(1, 'Funny', -1); 
+        $topAttr = new Attribute(1, 'Funny', -1); 
     }
 }

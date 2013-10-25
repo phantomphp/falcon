@@ -24,6 +24,11 @@ class ProductRepo implements RepositoryAwareInterface
     {
         return $this->find(array('uuid' => $uuid));
     }
+    
+    public function getProductBySKU($sku)
+    {
+        return $this->find(array('sku' => $sku));
+    }
 
     public function create($data)
     {
@@ -58,9 +63,7 @@ class ProductRepo implements RepositoryAwareInterface
         $products = array();
         $params['deleted'] = 0;
         $result = $this->repository->select('product', array('*'), $params);
-        while ($result->valid()) {
-            $row = $result->current();
-            $result->next();
+        foreach ($result as $row) {
             $product = new Product($row['id'], $row['uuid'], array(
                 'name' => $row['name'],
                 'year' => $row['year'],
@@ -83,15 +86,13 @@ class ProductRepo implements RepositoryAwareInterface
     protected function populateAttributes(Product $product)
     {
         $result = $this->repository->select('product_attribute', array('*'), array('product_id' => $product->getId()));
-        while ($result->valid()) {
-            $record = $result->current();
+        foreach ($result as $record) {
             if ($record['intval']) {
                 $val = (int) $record['intval'];
             } else {
                 $val = $record['textval'];
             }
             $product->setAttribute($record['attribute_id'], $val);
-            $result->next();
         }
         
         return $product;

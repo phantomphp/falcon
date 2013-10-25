@@ -2,7 +2,7 @@
 $product = $this->product;
 $attributes = $this->attributes;
 ?>
-<h3><?php echo $product->get('name'); ?> <small><a href="/administration/product/edit/<?php echo $product->getUUID(); ?>" class=""><i class="icon-edit-sign"></i></a></small></h3>
+<h3><?php echo $product->get('name'); ?> <small><a href="/administration/product/edit/<?php echo $product->getUUID(); ?>" class=""><i class="icon-pencil"></i></a></small></h3>
 <div class="row">
     <div class="large-2 columns">
         <label for="name" class="inline">Year:</label>
@@ -63,18 +63,18 @@ $attributes = $this->attributes;
     <div class="large-10 columns">
     <?php 
         switch ($attribute->getType()) {
-            case Falcon\Product\ProductAttribute::TYPE_TEXT:
-            case Falcon\Product\ProductAttribute::TYPE_TEXTAREA:
-            case Falcon\Product\ProductAttribute::TYPE_SELECT:
+            case Falcon\Product\Attribute\Attribute::TYPE_TEXT:
+            case Falcon\Product\Attribute\Attribute::TYPE_TEXTAREA:
+            case Falcon\Product\Attribute\Attribute::TYPE_SELECT:
                 echo $this->isempty($product->getAttribute($attribute->getId()));
                 break;
 
-            case Falcon\Product\ProductAttribute::TYPE_SET:
+            case Falcon\Product\Attribute\Attribute::TYPE_SET:
                 if ($attribute->hasChildren()) {
                     foreach ($attribute->getChildren() as $child) {
                         $val = null;
                         //for now we assume that set may have only radio or checkbox
-                        if ($child->getType() == Falcon\Product\ProductAttribute::TYPE_RADIO) {
+                        if ($child->getType() == Falcon\Product\Attribute\Attribute::TYPE_RADIO) {
                             $selected = $product->getAttribute($attribute->getId());
                             if ($selected == $child->getId()) {
                                 $val = '<span class="radius secondary label">' . $child->getLabel() . '</span>';

@@ -95,6 +95,27 @@ class ProductRepoTest extends ServiceManagerProviderTestCase
         $this->assertEquals($expected, $actual);
     }
 
+    public function testGetProductBySKU()
+    {
+        $repo = $this->get('Product\ProductRepo');
+        $expected = new Product(self::ID, self::UUID, array(
+            'name' => self::NAME,
+            'year' => self::YEAR,
+            'designer' => self::DESIGNER,
+            'publisher' => self::PUBLISHER,
+            'sku' => self::SKU,
+            'upc' => self::UPC,
+            'msrp' => self::MSRP,
+        ));
+        $expected->setActive(self::ACTIVE);
+        $expected->setDeleted(self::DELETED);
+        $expected->setCreatedDate(self::CREATED_DATE);
+        $expected->setModifiedDate(self::MODIFIED_DATE);
+
+        $actual = $repo->getProductBySKU(self::SKU);
+        $this->assertEquals($expected, $actual);
+    }
+
     public function testCreateProduct()
     {
         $repo = $this->get('Product\ProductRepo');

@@ -7,21 +7,10 @@ if ($auth->hasIdentity()) {
 
         $allMenus = array(
             'left' => array(
-                array('label' => 'Reports', 'url' => '#', 'sub' => array(
-                    array('label' => 'ROI', 'url' => '/report/index/roi'),
-                    array('label' => 'eDocs', 'url' => '/report/index/edocs'),
-                    array('label' => 'Scholarship', 'url' => '/report/index/scholarship'),
-                    array('label' => 'Senior Data', 'url' => '/report/index/senior'),
-                    array('label' => 'Student Usage', 'url' => '/report/index/student-usage'),
-                )),
-                array('label' => 'Charts', 'url' => '#', 'sub' => array(
-                    array('label' => 'Geo::US', 'url' => '/application/chart/geous'),
-                    array('label' => 'Geo::World', 'url' => '/application/chart/geoworld'),
-                    array('label' => 'Accounts', 'url' => '/application/chart/account'),
-                )),
+                array('label' => 'Contact Us', 'url' => '#'),
             ),
             'right' => array(
-                array('label' => 'Logout', 'url' => '/logout')
+                //array('label' => 'Logout', 'url' => '/logout')
             )
         );
 
@@ -49,7 +38,7 @@ if ($auth->hasIdentity()) {
         <nav class="top-bar">
             <ul class="title-area">
                 <li class="name">
-                    <h1><a href="<?php echo $this->basePath('/') ?>">Main</a></h1>
+                    <h1><a href="<?php echo $this->basePath('/') ?>">Gamesopedia</a></h1>
                 </li>
                 <?php if ($html) :?>
                 <li class="toggle-topbar menu-icon"><a href="#"><span></span></a></li>

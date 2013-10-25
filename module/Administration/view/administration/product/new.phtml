@@ -71,7 +71,7 @@
             <div class="large-10 columns">
             <?php 
                 switch ($attribute->getType()) {
-                    case Falcon\Product\ProductAttribute::TYPE_SELECT:
+                    case Falcon\Product\Attribute\Attribute::TYPE_SELECT:
                         echo '<select name="attribute[' . $attribute->getId() . ']">';
                         foreach ($attribute->getOptions() as $option) {
                             echo '<option value="' . $option . '">' . $option . '</option>';
@@ -79,11 +79,11 @@
                         echo '</select>';
                         break;
 
-                    case Falcon\Product\ProductAttribute::TYPE_SET:
+                    case Falcon\Product\Attribute\Attribute::TYPE_SET:
                         if ($attribute->hasChildren()) {
                             foreach ($attribute->getChildren() as $child) {
                                 //for now we assume that set may have only radio or checkbox
-                                if ($child->getType() == Falcon\Product\ProductAttribute::TYPE_RADIO) {
+                                if ($child->getType() == Falcon\Product\Attribute\Attribute::TYPE_RADIO) {
                                     $type = 'radio';
                                     $id = $attribute->getId();
                                     $val = $child->getId();
@@ -98,11 +98,11 @@
                         }
                         break;
 
-                    case Falcon\Product\ProductAttribute::TYPE_TEXTAREA:
+                    case Falcon\Product\Attribute\Attribute::TYPE_TEXTAREA:
                         echo '<textarea name="attribute[' . $attribute->getId() . ']"></textarea>';
                         break;
 
-                    case Falcon\Product\ProductAttribute::TYPE_TEXT:
+                    case Falcon\Product\Attribute\Attribute::TYPE_TEXT:
                         echo '<input type="text" name="attribute[' . $attribute->getId() . ']" />';
                         break;
                 }

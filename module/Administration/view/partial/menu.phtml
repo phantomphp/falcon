@@ -28,7 +28,7 @@ if ($auth->hasIdentity()) {
                     $html .= '<ul class="dropdown">';
                     foreach ($menu['sub'] as $subItems) {
                         $html .= '<li class="divider"></li>';
-                        $html .= '<li><a href="'.$subItems['url'].'">' . $subItems['label'] . '</a></li>';
+                        $html .= '<li class=""><a href="'.$subItems['url'].'">' . $subItems['label'] . '</a></li>';
                     }
                     $html .= '</ul>';
                 }
@@ -39,18 +39,18 @@ if ($auth->hasIdentity()) {
     }
 }
 ?>
-        <nav class="top-bar">
-            <ul class="title-area">
-                <li class="name">
-                    <h1><a href="<?php echo $this->basePath('/administration') ?>">Admin Home</a></h1>
-                </li>
-                <?php if ($html) :?>
-                <li class="toggle-topbar menu-icon"><a href="#"><span></span></a></li>
-                <?php endif; ?>
-            </ul>
-            <?php if ($html) :?>
-            <section class="top-bar-section">
-                <?php echo $html; ?>
-            </section>
-            <?php endif; ?>
-        </nav>
+<nav class="top-bar">
+    <ul class="title-area">
+        <li class="name">
+            <h1><a href="<?php echo $this->basePath('/administration') ?>">Admin Home</a></h1>
+        </li>
+        <?php if ($html) :?>
+        <li class="toggle-topbar menu-icon"><a href="#"><span></span></a></li>
+        <?php endif; ?>
+    </ul>
+    <?php if ($html) :?>
+    <section class="top-bar-section">
+        <?php echo $html; ?>
+    </section>
+    <?php endif; ?>
+</nav>

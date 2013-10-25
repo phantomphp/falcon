@@ -4,6 +4,8 @@ namespace Falcon;
 
 use Falcon\Repository\DbRepository;
 use Falcon\Repository\RepositoryAwareInterface;
+use Falcon\Product\ProductRepo;
+use Falcon\Product\ProductRepoAwareInterface;
 
 use Zend\Db\Adapter\Adapter;
 
@@ -19,6 +21,8 @@ class ServiceManager
 
         if ($instance instanceof RepositoryAwareInterface) {
             $instance->setRepository(self::getDbRepository());
+        } elseif ($instance instanceof ProductRepoAwareInterface) {
+            $instance->setProductRepo(self::get('Product\ProductRepo'));
         }
 
         return $instance;

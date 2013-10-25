@@ -37,4 +37,10 @@ class Product extends LazyModelAbstract
         $this->attributes[$key] = $value;
     }
     
+    public function getMainImage($basePath = '')
+    {
+        $id = $this->get('sku');
+        return $basePath . '/img/product/' . $id . '.jpg'; 
+    }
+    
 }

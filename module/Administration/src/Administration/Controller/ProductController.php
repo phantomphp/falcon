@@ -32,7 +32,7 @@ class ProductController extends SecureController
         }
         $product = ServiceManager::get('Product\ProductRepo')->getProductByUUID($id);
         return new ViewModel(array(
-            'attributes' => ServiceManager::get('Product\ProductAttributeRepo')->findAll(),
+            'attributes' => ServiceManager::get('Product\Attribute\AttributeRepo')->findAll(),
             'product' => $product
         ));
     }
@@ -55,7 +55,7 @@ class ProductController extends SecureController
         }
         
         return new ViewModel(array(
-            'attributes' => ServiceManager::get('Product\ProductAttributeRepo')->findAll(),
+            'attributes' => ServiceManager::get('Product\Attribute\AttributeRepo')->findAll(),
             'post' => $post
         ));
     }
@@ -81,7 +81,7 @@ class ProductController extends SecureController
             }
             $product = ServiceManager::get('Product\ProductRepo')->getProductByUUID($id);
             return new ViewModel(array(
-                'attributes' => ServiceManager::get('Product\ProductAttributeRepo')->findAll(),
+                'attributes' => ServiceManager::get('Product\Attribute\AttributeRepo')->findAll(),
                 'product' => $product
             ));            
         }

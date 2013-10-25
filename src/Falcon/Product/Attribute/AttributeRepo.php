@@ -1,11 +1,11 @@
 <?php
 
-namespace Falcon\Product;
+namespace Falcon\Product\Attribute;
 
 use Falcon\Repository\RepositoryAwareInterface;
 use Falcon\Repository\RepositoryInterface;
 
-class ProductAttributeRepo implements RepositoryAwareInterface
+class AttributeRepo implements RepositoryAwareInterface
 {
     protected $repository;
     
@@ -16,11 +16,11 @@ class ProductAttributeRepo implements RepositoryAwareInterface
     
     public function assembleAttribute($data)
     {
-        $attr = new ProductAttribute($data['id'], $data['label'], $data['type']);
+        $attr = new Attribute($data['id'], $data['label'], $data['type']);
         switch($attr->getType()) {
-            case ProductAttribute::TYPE_CHECKBOX:
+            case Attribute::TYPE_CHECKBOX:
                 break;
-            case ProductAttribute::TYPE_SELECT:
+            case Attribute::TYPE_SELECT:
                 $options = json_decode($data['options']);
                 $attr->setOptions($options);
                 break;
@@ -40,8 +40,7 @@ class ProductAttributeRepo implements RepositoryAwareInterface
     {
         $data = $attributes = array();
         $result = $this->repository->select('attribute', array('*'));
-        while ($result->valid()) {
-            $record = $result->current();
+        foreach ($result as $record) {
             $parentId = $record['parent_id'];
             unset($record['parent_id']);
             if (!empty($parentId)) {
@@ -49,7 +48,6 @@ class ProductAttributeRepo implements RepositoryAwareInterface
             } else {
                 $data[$record['id']] = $record;
             }
-            $result->next();
         }
         
         foreach ($data as $attr) {

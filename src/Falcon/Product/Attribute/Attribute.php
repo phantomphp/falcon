@@ -1,8 +1,8 @@
 <?php
 
-namespace Falcon\Product;
+namespace Falcon\Product\Attribute;
 
-class ProductAttribute
+class Attribute
 {
     
     const TYPE_SET = 0;
@@ -42,7 +42,7 @@ class ProductAttribute
         return $this->id;
     }
     
-    public function addChild(ProductAttribute $attr)
+    public function addChild(Attribute $attr)
     {
         $this->children[] = $attr;
     }
