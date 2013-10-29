@@ -6,6 +6,8 @@ use Falcon\Repository\DbRepository;
 use Falcon\Repository\RepositoryAwareInterface;
 use Falcon\Product\ProductRepo;
 use Falcon\Product\ProductRepoAwareInterface;
+use Falcon\Product\Attribute\AttributeRepo;
+use Falcon\Product\Attribute\AttributeRepoAwareInterface;
 
 use Zend\Db\Adapter\Adapter;
 
@@ -21,9 +23,14 @@ class ServiceManager
 
         if ($instance instanceof RepositoryAwareInterface) {
             $instance->setRepository(self::getDbRepository());
-        } elseif ($instance instanceof ProductRepoAwareInterface) {
+        }
+        if ($instance instanceof ProductRepoAwareInterface) {
             $instance->setProductRepo(self::get('Product\ProductRepo'));
         }
+        if ($instance instanceof AttributeRepoAwareInterface) {
+            $instance->setAttributeRepo(self::get('Product\Attribute\AttributeRepo'));
+        }
+        
 
         return $instance;
     }

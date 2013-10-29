@@ -4,37 +4,76 @@ namespace Falcon\Product\Attribute;
 
 class AttributeCollection implements \Iterator, \Countable
 {
-    private $elements = array();
+    protected $attributes = array();
+
+    protected $position;
     
-    private $position = 0;
-    
-    public function count()
-    {
-        return count($this->elements);
-    }
-    
-    public function rewind()
+    public function __construct()
     {
         $this->position = 0;
     }
     
-    public function current()
+    public function count()
     {
-        return $this->elements[$this->position];
+        return count($this->attributes);
     }
     
-    public function key()
-    {
+    function rewind() {
+        $this->position = 0;
+    }
+
+    function current() {
+        return $this->attributes[$this->position];
+    }
+
+    function key() {
         return $this->position;
     }
-    
-    public function next()
+
+    function next() {
+        ++$this->position;
+    }
+
+    function valid() {
+        return isset($this->attributes[$this->position]);
+    }
+        
+    public function add(Attribute $attr)
     {
-        return ++$this->position;
+        $this->attributes[] = $attr;
     }
     
-    public function valid()
+    public function findByName($name)
     {
-        return isset($this->elements[$this->position]);
+        foreach ($this->attributes as $attribute) {
+            if ($attribute->getLabel() == $name) {
+                return $attribute;
+            } elseif ($attribute->hasChildren()) {
+                foreach ($attribute->getChildren() as $child) {
+                    if ($child->getLabel() == $name) {
+                        return $child;
+                    }
+                }
+            }
+        }
+        
+        throw new \RuntimeException('Invalid atrribute name provided!');
+    }
+    
+    public function findById($id)
+    {
+        foreach ($this->attributes as $attribute) {
+            if ($attribute->getId() == $id) {
+                return $attribute;
+            } elseif ($attribute->hasChildren()) {
+                foreach ($attribute->getChildren() as $child) {
+                    if ($child->getId() == $id) {
+                        return $child;
+                    }
+                }
+            }
+        }
+        
+        throw new \RuntimeException('Invalid id provided!');
     }
 }

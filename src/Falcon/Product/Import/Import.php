@@ -4,10 +4,13 @@ namespace Falcon\Product\Import;
 
 use Falcon\Product\ProductRepo;
 use Falcon\Product\ProductRepoAwareInterface;
+use Falcon\Product\Attribute\AttributeRepoAwareInterface;
 
-class Import implements ProductRepoAwareInterface
+class Import implements ProductRepoAwareInterface, AttributeRepoAwareInterface
 {
     protected $productRepo;
+    
+    protected $attributeRepo;
     
     /**
      * @var SplFileInfo
@@ -33,15 +36,16 @@ class Import implements ProductRepoAwareInterface
         while ($row = $this->csvFile->fgetcsv()) {
             if ($first) {
                 $first = false;
+                $keys = $row;
                 continue;
             }
-            $this->processRow($row);
+            $this->processRow(array_combine($keys, $row));
         }
     }
     
     public function processRow($row)
     {
-        
+        $this->processProduct($row);
     }
     
     protected function processProduct()

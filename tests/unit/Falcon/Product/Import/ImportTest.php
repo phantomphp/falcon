@@ -44,7 +44,7 @@ class ImportTest extends ServiceManagerProviderTestCase
         );
     }
     
-    public function testProcessRow()
+    public function testProcessProduct()
     {
         
     }

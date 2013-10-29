@@ -76,6 +76,8 @@ class AttributeRepoTest extends ServiceManagerProviderTestCase
         $attribute->addChild(new Attribute(35, '15+', Attribute::TYPE_CHECKBOX));
         $attribute->addChild(new Attribute(36, 'Adult', Attribute::TYPE_CHECKBOX));
         $actual = $this->getRepo()->findAll();
-        $this->assertEquals(array( 30 => $attribute), $actual);
+        $collection = new AttributeCollection();
+        $collection->add($attribute);
+        $this->assertEquals($collection, $actual);
     }
 }

@@ -38,7 +38,13 @@ class AttributeRepo implements RepositoryAwareInterface
     
     public function findAll()
     {
-        $data = $attributes = array();
+        return $this->fetchAll();
+    }
+    
+    public function fetchAll()
+    {
+        $data = array();
+        $attributes =  new AttributeCollection;
         $result = $this->repository->select('attribute', array('*'));
         foreach ($result as $record) {
             $parentId = $record['parent_id'];
@@ -51,9 +57,10 @@ class AttributeRepo implements RepositoryAwareInterface
         }
         
         foreach ($data as $attr) {
-            $attributes[$attr['id']] = $this->assembleAttribute($attr);
+            $attributes->add($this->assembleAttribute($attr));
         }
 
         return $attributes;
     }
+    
 }
