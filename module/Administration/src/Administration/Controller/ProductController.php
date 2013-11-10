@@ -9,9 +9,13 @@
 
 namespace Administration\Controller;
 
-use Zend\View\Model\ViewModel;
 use Falcon\ServiceManager;
 use Falcon\Helper\Helper;
+
+use Zend\View\Model\ViewModel;
+use Zend\Http\Headers as HttpHeaders;
+use Zend\Http\Header\ContentType as HeaderContentType;
+use Zend\Http\Header\ContentLength as HeaderContentLength;
 
 class ProductController extends SecureController
 {
@@ -97,6 +101,32 @@ class ProductController extends SecureController
         $product = ServiceManager::get('Product\ProductRepo')->delete($id);
         $this->flashMessenger()->addSuccessMessage('Product has been deleted.');
         return $this->redirect()->toUrl('/administration/product/index');
+    }
+    
+    public function importAction()
+    {
+        
+        if ($this->getRequest()->isPost()) {
+            echo print_r($_FILES, true);
+            exit;
+        }
+        
+        return new ViewModel(array(
+            'attributeCollection' => ServiceManager::get('Product\Attribute\AttributeRepo')->fetchAll()
+        ));
+    }
+    
+    public function importTemplateAction()
+    {
+        $file = new \SplFileInfo(__DIR__ . '/../../../data/import-template.csv');
+        $response = $this->getResponse();
+        $response->setStatusCode(200);
+        $headers = new HttpHeaders();
+        $headers->addHeader(HeaderContentType::fromString('content-type: text/csv'));
+        $headers->addHeader(HeaderContentLength::fromString('content-length: ' . $file->getSize()));
+        $response->setHeaders($headers);
+        $response->setContent(file_get_contents($file->getRealPath()));
+        return $response;
     }
 
 }

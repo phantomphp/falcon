@@ -57,7 +57,7 @@ class AttributeCollection implements \Iterator, \Countable
             }
         }
         
-        throw new \RuntimeException('Invalid atrribute name provided!');
+        throw new \RuntimeException('Invalid atrribute name provided: ' . $name);
     }
     
     public function findById($id)

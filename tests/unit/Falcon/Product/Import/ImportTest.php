@@ -10,7 +10,7 @@ class ImportTest extends ServiceManagerProviderTestCase
     {
         return $this->get('Product\Import\Import');
     }
-    
+
     public function testInstance()
     {
         $import = $this->getImport();
@@ -44,8 +44,30 @@ class ImportTest extends ServiceManagerProviderTestCase
         );
     }
     
-    public function testProcessProduct()
+    public function testProcessRow()
     {
-        
+        $import = $this->getImport();
+        $productRepo = $this->get('Product\ProductRepo');
+        $attributeRepo = $this->get('Product\Attribute\AttributeRepo');
+        $row = $this->getTestRow();
+        $import->processRow($row);
+        $product = $productRepo->getProductBySKU($row['sku']);
+        $this->assertNotEmpty($product);
+        $attributeCollection = $attributeRepo->fetchAll();
+        $attributes = $product->getAttributes();
+        $attrCategory = $attributeCollection->findByName('Category');
+        $this->assertSame($attributes[$attrCategory->getId()], '1c');
+        $attrPlayer = $attributeCollection->findByName('Players');
+        $this->assertSame($attributes[$attrPlayer->getId()], 2);
+        $attrWeightLight = $attributeCollection->findByName('Light');
+        $this->assertSame($attributes[$attrWeightLight->getId()], 1);
+        $attrWeightHeavy = $attributeCollection->findByName('Heavy');
+        $this->assertSame($attributes[$attrWeightHeavy->getId()], 1);
+    }
+
+    public function tearDown()
+    {
+        $this->getDb()->execute('truncate product');
+        $this->getDb()->execute('truncate product_attribute');
     }
 } 
