@@ -11,6 +11,7 @@ namespace Administration\Controller;
 
 use Falcon\ServiceManager;
 use Falcon\Helper\Helper;
+use Falcon\Product\Attribute\Attribute;
 
 use Zend\View\Model\ViewModel;
 use Zend\Http\Headers as HttpHeaders;
@@ -19,6 +20,17 @@ use Zend\Http\Header\ContentLength as HeaderContentLength;
 
 class ProductController extends SecureController
 {
+    
+    private $attribute_map = array(
+        Attribute::TYPE_TEXT => 'Text',
+        Attribute::TYPE_TEXTAREA => 'Textarea',
+        Attribute::TYPE_CHECKBOX => 'Checkbox',
+        Attribute::TYPE_URL => 'URL',
+        Attribute::TYPE_SELECT => 'Select',
+        Attribute::TYPE_SET_RADIO => 'Radio Set',
+        Attribute::TYPE_SET_CHECKBOX => 'Checkbox Set',
+    );
+    
     public function indexAction()
     {
         $products = ServiceManager::get('Product\ProductRepo')->findAll();
@@ -115,7 +127,8 @@ class ProductController extends SecureController
         }
         
         return new ViewModel(array(
-            'attributeCollection' => ServiceManager::get('Product\Attribute\AttributeRepo')->fetchAll()
+            'attributeCollection' => ServiceManager::get('Product\Attribute\AttributeRepo')->fetchAll(),
+            'attribute_map' => $this->attribute_map
         ));
     }
     
