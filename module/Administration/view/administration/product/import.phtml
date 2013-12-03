@@ -11,55 +11,59 @@
                 <li>UPC</li>
                 <li>MSRP</li>
             </ul> 
-        <h5 class="subheader">Attributes: </h5>
-        <table>
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Type</th>
-                    <th>Options</th>
-                </tr>
-            </thead>
-            <tbody>
-<?php
-    foreach ($this->attributeCollection as $attribute) {
-        echo '<tr>';
-        echo '<td>' . $attribute->getLabel() . '</td>';
-        switch ($attribute->getType()) {
-            case Falcon\Product\Attribute\Attribute::TYPE_SELECT:
-                echo '<td>';
-                echo 'select';
-                echo '</td>';
-                echo '<td>';
-                foreach ($attribute->getOptions() as $option) {
-                    echo '<span class="label secondary radius">' . $option . '</span> ';
-                }
-                echo '</td>';
-                break;
+        <h5 class="subheader">Current Attributes: </h5>
+        <div class="row alert-aware">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Options</th>
+                    </tr>
+                </thead>
+                <tbody>
+        <?php foreach ($this->attributeCollection as $attribute) : ?>
+                    <tr>
+                        <td>
+                            <?php echo $attribute->getLabel(); ?>
+                        </td>
+                        <td>
+                            <?php echo $this->attribute_map[$attribute->getType()]; ?>
+                        </td>
+                        <td>
+            <?php 
+                switch ($attribute->getType()) {
+                    case Falcon\Product\Attribute\Attribute::TYPE_TEXT:
+                    case Falcon\Product\Attribute\Attribute::TYPE_TEXTAREA:
+                        echo '<em>na</em>';
+                        break;
+                    case Falcon\Product\Attribute\Attribute::TYPE_SELECT:
+                    case Falcon\Product\Attribute\Attribute::TYPE_SET_RADIO:
+                        case Falcon\Product\Attribute\Attribute::TYPE_SET_CHECKBOX:
+                        if ($attribute->hasChildren()) {
+                            foreach ($attribute->getChildren() as $child) {
+                                        echo '<span class="radius secondary label">' . $child->getLabel() . '</span> &nbsp;';
+                            }
+                        }
+                        break;
+                } //switch
+            ?>
+                        </td>
+                    </tr>
+        <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
 
-            case Falcon\Product\Attribute\Attribute::TYPE_SET:
-                $children = $attribute->getChildren();
-                $type = $children[0]->getType() == Falcon\Product\Attribute\Attribute::TYPE_CHECKBOX ? 'checkbox' : 'radio';
-                echo '<td>' . $type . '</td>';
-                echo '<td>';
-                foreach ($children as $child) {
-                    echo '<span class="label secondary radius">' . $child->getLabel() . '</span> ';
-                }
-                echo '</td>';
-                break;
-                
-                
-            default:
-                echo '<td>text</td><td></td>';
-                break;
-        }
-        echo '</tr>';
-    }
-?>
-            </tbody>
-        </table>
-        <p> <a href="<?php echo $this->basePath('administration/product/import-template')?>" target="_blank">Download import template here.</a> </p>
-        <input type="file" name="file" />
+
+        <h5>How to start import</h5>
+        <p>1. Prepare an import file. <a href="<?php //echo $this->basePath('administration/product/import-template')?>" target="_blank" style="text-decoration:line-through">Download import template here.</a> Use Google Spreadsheet for now.</p>
+        <p>2. Upload the import file <input type="file" name="file" /></p>
         <button class="radius">Submit</button>
     </fieldset>
 </form>
+<script>
+    function onFormDataSuccess(data){
+        pushAlert('Processed: ' + data.result + ' records', 'success');
+    }
+</script>

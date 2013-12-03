@@ -3,6 +3,7 @@
 namespace Falcon\Product\Import;
 
 use Falcon\ServiceManagerProviderTestCase;
+use Falcon\Product\Attribute\Attribute;
 
 class ImportTest extends ServiceManagerProviderTestCase
 {
@@ -28,19 +29,13 @@ class ImportTest extends ServiceManagerProviderTestCase
             'publisher' => 'publisher-5',
             'upc' => 'upc-6',
             'msrp' => 'msrp-7',
-            'Category' => '1c',
-            'Players' => '2',
-            'Weight' => 'Light,Heavy',
-            'Ages' => '2-4,5-7',
-            'Duration' => '10-20 min',
-            'Theme' => 'Educational',
-            'Theme Style' => 'None',
-            'Interaction' => 'Hostile',
-            'Win Condition' => '',
-            'Skills' => '',
-            'Pace' => '',
-            'Reading Level' => '',
-            'Description' => ''
+            'Category' => '1b',
+            'Difficulty' => 'Hard',
+            'Theme' => 'Some theme',
+            'Description' => 'sadjslkadj askld ja',
+            'Active' => '1',
+            'URL' => 'http://google.com',
+            'Strategy' => 'Think,Shoot'
         );
     }
     
@@ -54,15 +49,10 @@ class ImportTest extends ServiceManagerProviderTestCase
         $product = $productRepo->getProductBySKU($row['sku']);
         $this->assertNotEmpty($product);
         $attributeCollection = $attributeRepo->fetchAll();
-        $attributes = $product->getAttributes();
-        $attrCategory = $attributeCollection->findByName('Category');
-        $this->assertSame($attributes[$attrCategory->getId()], '1c');
-        $attrPlayer = $attributeCollection->findByName('Players');
-        $this->assertSame($attributes[$attrPlayer->getId()], 2);
-        $attrWeightLight = $attributeCollection->findByName('Light');
-        $this->assertSame($attributes[$attrWeightLight->getId()], 1);
-        $attrWeightHeavy = $attributeCollection->findByName('Heavy');
-        $this->assertSame($attributes[$attrWeightHeavy->getId()], 1);
+        # SELECT
+        $parent = $attributeCollection->findByName('Category');
+        $child = $attributeCollection->findByName('1b');
+        $this->assertSame($product->getAttribute($parent->getId()), $child->getId());
     }
 
     public function tearDown()

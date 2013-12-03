@@ -61,36 +61,63 @@ $attributes = $this->attributes;
         <label for="name" class="inline"><?php echo $attribute->getLabel() ?>:</label>
     </div>
     <div class="large-10 columns">
-    <?php 
+    <?php
+        $attributeId = $attribute->getId();
+        $val = null;
         switch ($attribute->getType()) {
             case Falcon\Product\Attribute\Attribute::TYPE_TEXT:
             case Falcon\Product\Attribute\Attribute::TYPE_TEXTAREA:
-            case Falcon\Product\Attribute\Attribute::TYPE_SELECT:
-                echo $this->isempty($product->getAttribute($attribute->getId()));
+                $text = $product->getAttribute($attribute->getId());
+                echo $this->isempty($text); 
                 break;
-
-            case Falcon\Product\Attribute\Attribute::TYPE_SET:
+            case Falcon\Product\Attribute\Attribute::TYPE_URL:
+                $url = $product->getAttribute($attribute->getId());
+                if (!empty($url)) {
+                    printf('<a href="%s" target="_blank">%s</a>', htmlspecialchars($url), htmlspecialchars($url));
+                } 
+                break;
+                
+            case Falcon\Product\Attribute\Attribute::TYPE_SELECT:
                 if ($attribute->hasChildren()) {
                     foreach ($attribute->getChildren() as $child) {
-                        $val = null;
-                        //for now we assume that set may have only radio or checkbox
-                        if ($child->getType() == Falcon\Product\Attribute\Attribute::TYPE_RADIO) {
-                            $selected = $product->getAttribute($attribute->getId());
-                            if ($selected == $child->getId()) {
-                                $val = '<span class="radius secondary label">' . $child->getLabel() . '</span>';
-                            }
-                        } else {
-                            $selected = $product->getAttribute($child->getId());
-                            if ($selected) {
-                                $val = '<span class="radius secondary label">' . $child->getLabel() . '</span> &nbsp;';
-                            }
+                        if ($child->getId() == $product->getAttribute($attributeId)) {
+                            printf('<span class="radius secondary label">%s</span>', $child->getLabel());
                         }
-                        echo $this->isempty($val, 'none');
                     }
                 }
                 break;
+            case Falcon\Product\Attribute\Attribute::TYPE_SET_RADIO:
+                if ($attribute->hasChildren()) {
+                    foreach ($attribute->getChildren() as $child) {
+                        if ($child->getId() == $product->getAttribute($attributeId)) {
+                            printf('<span class="radius secondary label">%s</span>', $child->getLabel());
+                        }
+                    }
+                }
+                break;
+            case Falcon\Product\Attribute\Attribute::TYPE_SET_CHECKBOX:
+                if ($attribute->hasChildren()) {
+                    foreach ($attribute->getChildren() as $child) {
+                        if ($product->getAttribute($child->getId())) {
+                            printf('<span class="radius secondary label">%s</span> &nbsp;', $child->getLabel());
+                        }
+                    }
+                }
+                break;
+            
+            case Falcon\Product\Attribute\Attribute::TYPE_CHECKBOX:
+                $selected = $product->getAttribute($attributeId) == 1 ? 'Yes' : 'No';
+                printf('<span class="radius secondary label">%s</span>', $selected);
+                break;
+                            
+            
         }
     ?>
     </div>
 </div>
 <?php endforeach; ?>
+
+<h4>Images</h4>
+<div class="row">
+    
+</div>

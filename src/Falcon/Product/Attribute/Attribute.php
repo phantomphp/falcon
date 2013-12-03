@@ -5,13 +5,16 @@ namespace Falcon\Product\Attribute;
 class Attribute
 {
     
-    const TYPE_SET = 0;
+    const TYPE_OPTION = 0;
     const TYPE_TEXT = 1;
     const TYPE_TEXTAREA = 2;
     const TYPE_RADIO = 3;
     const TYPE_CHECKBOX = 4;
-    const TYPE_SELECT = 5;
     const TYPE_URL = 6;
+    
+    const TYPE_SELECT = 50;
+    const TYPE_SET_RADIO = 51;
+    const TYPE_SET_CHECKBOX = 52;
     
     protected $id;
     protected $label;
@@ -21,9 +24,10 @@ class Attribute
 
     public function __construct($id, $label, $type)
     {
-        if (empty($id)) {
-            throw new \InvalidArgumentException('Attribute id cannot be empty');
+        if (!empty($id) && !is_numeric($id)) {
+            throw new \InvalidArgumentException('Invalid id detected!');
         }
+
         if (empty($label)) {
             throw new \InvalidArgumentException('Attribute label cannot be empty');
         }
@@ -66,17 +70,7 @@ class Attribute
     {
         return $this->type;
     }
-    
-    public function setOptions($options)
-    {
-        $this->options = $options;
-    }
-    
-    public function getOptions()
-    {
-        return $this->options;
-    }
-    
+
     public function setValue($value)
     {
         $this->value = $value;

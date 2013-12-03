@@ -73,29 +73,32 @@
                 switch ($attribute->getType()) {
                     case Falcon\Product\Attribute\Attribute::TYPE_SELECT:
                         echo '<select name="attribute[' . $attribute->getId() . ']">';
-                        foreach ($attribute->getOptions() as $option) {
-                            echo '<option value="' . $option . '">' . $option . '</option>';
+                        if ($attribute->hasChildren()) {
+                            foreach ($attribute->getChildren() as $child) {
+                                printf('<option value="%s">%s</option>', $child->getId(), $child->getLabel());
+                            }
                         }
                         echo '</select>';
                         break;
 
-                    case Falcon\Product\Attribute\Attribute::TYPE_SET:
+                    case Falcon\Product\Attribute\Attribute::TYPE_SET_RADIO:
                         if ($attribute->hasChildren()) {
                             foreach ($attribute->getChildren() as $child) {
-                                //for now we assume that set may have only radio or checkbox
-                                if ($child->getType() == Falcon\Product\Attribute\Attribute::TYPE_RADIO) {
-                                    $type = 'radio';
-                                    $id = $attribute->getId();
-                                    $val = $child->getId();
-                                } else {
-                                    $type = 'checkbox';
-                                    $id = $child->getId();
-                                    $val = 1;
-                                }
-                                echo '<input type="'.$type.'" name="attribute['. $id .']" value="'.$val.'" /> ';
-                                echo $child->getLabel() . '&nbsp;&nbsp;';
+                                printf('<input type="radio" name=attribute[%s] value="%s" /> %s &nbsp;&nbsp;', $attribute->getId(), $child->getId(), $child->getLabel());
                             }
                         }
+                        break;
+                        
+                    case Falcon\Product\Attribute\Attribute::TYPE_SET_CHECKBOX:
+                        if ($attribute->hasChildren()) {
+                            foreach ($attribute->getChildren() as $child) {
+                                printf('<input type="checkbox" name=attribute[%s] value="1" /> %s &nbsp;&nbsp;', $child->getId(), $child->getLabel());
+                            }
+                        }
+                        break;
+
+                    case Falcon\Product\Attribute\Attribute::TYPE_CHECKBOX:
+                        printf('<input type="checkbox" name=attribute[%s] value="1" /> %s &nbsp;&nbsp;', $attribute->getId(), $attribute->getLabel());
                         break;
 
                     case Falcon\Product\Attribute\Attribute::TYPE_TEXTAREA:
@@ -103,6 +106,7 @@
                         break;
 
                     case Falcon\Product\Attribute\Attribute::TYPE_TEXT:
+                    case Falcon\Product\Attribute\Attribute::TYPE_URL:
                         echo '<input type="text" name="attribute[' . $attribute->getId() . ']" />';
                         break;
                 }
@@ -116,7 +120,7 @@
             </div>
             <div class="large-10 columns">
                 <button id="submit" class="button radius">Save</button>
-                <button id="cancel" class="button radius" onclick="parent.location.href='/administration/product/index'; return false;">Cancel</button>
+                <button id="cancel" class="button radius secondary" onclick="parent.location.href='/administration/product/index'; return false;">Cancel</button>
             </div>
         </div>
     </fieldset>

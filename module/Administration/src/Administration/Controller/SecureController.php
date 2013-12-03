@@ -22,7 +22,7 @@ class SecureController extends AbstractActionController
         parent::onDispatch($e);
         if (!$this->identity()) {
             $this->flashMessenger()->addInfoMessage('You need to login first.');
-            $this->redirect()->toUrl('login');
+            $this->redirect()->toUrl('/login');
         } elseif (!$this->identity()->isAdmin()) {
             $this->redirect()->toUrl('/');
         }

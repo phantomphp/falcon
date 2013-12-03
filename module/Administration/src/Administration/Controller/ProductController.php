@@ -105,9 +105,12 @@ class ProductController extends SecureController
     
     public function importAction()
     {
-        
         if ($this->getRequest()->isPost()) {
-            echo print_r($_FILES, true);
+            $file = $_FILES['file']['tmp_name'];
+            $import = ServiceManager::get('Product\Import\Import');
+            $import->setFile($file);
+            $result = $import->run();
+            echo json_encode(array('result' => $result));
             exit;
         }
         
@@ -127,6 +130,16 @@ class ProductController extends SecureController
         $response->setHeaders($headers);
         $response->setContent(file_get_contents($file->getRealPath()));
         return $response;
+    }
+
+    public function imageUploadAction()
+    {
+        
+    }
+    
+    public function attributeManagerAction()
+    {
+        
     }
 
 }

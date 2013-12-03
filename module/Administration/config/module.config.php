@@ -13,6 +13,7 @@ return array(
             'Administration\Controller\Secure' => 'Administration\Controller\SecureController',
             'Administration\Controller\Index' => 'Administration\Controller\IndexController',
             'Administration\Controller\Product' => 'Administration\Controller\ProductController',
+            'Administration\Controller\Attribute' => 'Administration\Controller\AttributeController',
         ),
     ),
     'view_manager' => array(

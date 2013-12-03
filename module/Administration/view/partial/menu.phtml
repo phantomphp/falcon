@@ -12,6 +12,11 @@ if ($auth->hasIdentity()) {
                     array('label' => 'New', 'url' => '/administration/product/new'),
                     array('label' => 'Import', 'url' => '/administration/product/import')
                 )),
+                array('label' => 'Attributes', 'url' => '/administration/attribute/index', 'sub' => array(
+                    array('label' => 'List', 'url' => '/administration/attribute/index'),
+                    array('label' => 'New', 'url' => '/administration/attribute/new'),
+                )),
+                
             ),
             'right' => array(
                 array('label' => 'Logout', 'url' => '/logout')

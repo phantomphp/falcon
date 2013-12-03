@@ -16,21 +16,7 @@ class AttributeRepoTest extends ServiceManagerProviderTestCase
         $repo = $this->getRepo();
         $this->assertInstanceOf('Falcon\Product\Attribute\AttributeRepo', $repo);
     }
-    
-    public function testCategoryAssembly()
-    {
-        $data = array(
-            'id' => 1,
-            'label' => 'Category',
-            'type' => Attribute::TYPE_SELECT,
-            'options' => '["1a","1b","1c"]',
-        );
-        $expected = new Attribute($data['id'], $data['label'], $data['type']);
-        $expected->setOptions(json_decode($data['options']));
-        $actual = $this->getRepo()->assembleAttribute($data);
-        $this->assertEquals($expected, $actual);
-    }
-    
+
     public function testWeightAssembly()
     {
         $data = array(

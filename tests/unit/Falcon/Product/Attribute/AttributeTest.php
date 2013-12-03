@@ -14,12 +14,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($id, $attr->getId());
         $this->assertSame($label, $attr->getLabel());
         $this->assertSame($type, $attr->getType());
-        $options = array(
-            array('1' => '2011'),
-            array('2' => '2012'),
-        );
-        $attr->setOptions($options);
-        $this->assertSame($options, $attr->getOptions());
+       
         $value = 555;
         $attr->setValue($value);
         $this->assertSame($value, $attr->getValue());

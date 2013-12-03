@@ -17,14 +17,6 @@ class AttributeRepo implements RepositoryAwareInterface
     public function assembleAttribute($data)
     {
         $attr = new Attribute($data['id'], $data['label'], $data['type']);
-        switch($attr->getType()) {
-            case Attribute::TYPE_CHECKBOX:
-                break;
-            case Attribute::TYPE_SELECT:
-                $options = json_decode($data['options']);
-                $attr->setOptions($options);
-                break;
-        }
         if (isset($data['children']) && !empty($data['children'])) {
             foreach ($data['children'] as $child) {
                 $attr->addChild($this->assembleAttribute($child));
@@ -61,6 +53,55 @@ class AttributeRepo implements RepositoryAwareInterface
         }
 
         return $attributes;
+    }
+
+    
+    public function saveAttribute(Attribute $attr, $parentId = null)
+    {
+        $data = array(
+            'id' => $attr->getId(),
+            'label' => $attr->getLabel(),
+            'type' => $attr->getType()
+        );
+        if ($parentId) {
+            $data['parent_id'] = $parentId;
+        }
+        
+        if ($attr->getId()) {
+            $this->repository->update('attribute', $data, array('id' => $attr->getId()));
+            $parentId = $attr->getId();
+        } else {
+            $parentId = $this->repository->insert('attribute', $data);
+        }
+        
+        if ($attr->hasChildren()) {
+            foreach ($attr->getChildren() as $child) {
+                $this->saveAttribute($child, $parentId);
+            }
+        }
+        
+        return true;
+    }
+    
+    public function save($data)
+    {
+        $attr = new Attribute($data['id'], $data['label'], $data['type']);
+        if(in_array($data['type'], array(Attribute::TYPE_SET_RADIO, Attribute::TYPE_SET_CHECKBOX, Attribute::TYPE_SELECT))) {
+            if (isset($data['new-options'])) {
+                foreach ($data['new-options'] as $option) {
+                    $child = new Attribute(0, $option, Attribute::TYPE_OPTION);
+                    $attr->addChild($child);
+                }
+            }
+            if (isset($data['options'])) {
+                foreach ($data['options'] as $optionId => $optionName) {
+                    $child = new Attribute($optionId, $optionName, Attribute::TYPE_OPTION);
+                    $attr->addChild($child);
+                }
+            }
+        }
+        
+        return $this->saveAttribute($attr);
     }
     
 }

@@ -15,6 +15,8 @@ class Import implements ProductRepoAwareInterface, AttributeRepoAwareInterface
     
     protected $attributeRepo;
     
+    protected $columns;
+    
     /**
      * @var SplFileInfo
      * */
@@ -33,24 +35,33 @@ class Import implements ProductRepoAwareInterface, AttributeRepoAwareInterface
     public function __construct($importFile = null)
     {
         if (!empty($importFile)) {
-            if (!file_exists($importFile)) {
-                throw new \InvalidArgumentException('File does not exist: ' . $importFile);
-            }
-            $this->csvFile = new \SplFileObject($importFile, 'r');
+            $this->setFile($importFile);
         }
+    }
+    
+    public function setFile($importFile)
+    {
+        if (!file_exists($importFile)) {
+            throw new \InvalidArgumentException('File does not exist: ' . $importFile);
+        }
+        $this->csvFile = new \SplFileObject($importFile, 'r');
     }
     
     public function run()
     {
         $first = true; // skip first row
+        $result = 0;
         while ($row = $this->csvFile->fgetcsv()) {
             if ($first) {
                 $first = false;
-                $keys = $row;
+                $keys = $this->columns = $row;
                 continue;
             }
             $this->processRow(array_combine($keys, $row));
+            $result++;
         }
+        
+        return $result;
     }
     
     public function processRow($row)
@@ -83,42 +94,32 @@ class Import implements ProductRepoAwareInterface, AttributeRepoAwareInterface
     
     protected function processAttributes($productId, $row)
     {
-        $attributeNames = array(
-            'Category',  
-            'Players',
-            'Weight',
-            'Ages',
-            'Duration',
-            'Theme',
-            'Theme Style',
-            'Interaction',
-            'Win Condition',
-            'Skills',
-            'Pace',
-            'Reading Level',
-            'Description'
-        );
+        $row = array_slice($row, 7, NULL, true);
         $attributes = array();
         $attributeCollection = $this->attributeRepo->fetchAll();
-        foreach ($attributeNames as $name) {
-            if (empty($row[$name])) {
+        foreach ($row as $attributeName => $values) {
+            if (empty($values)) {
                 continue;
             }
-            $attribute = $attributeCollection->findByName($name);
+            $attribute = $attributeCollection->findByName($attributeName);
             switch ($attribute->getType()) {
-                case Attribute::TYPE_SET:
-                    $childNames = explode(',', $row[$name]);
+                case Attribute::TYPE_SELECT:
+                case Attribute::TYPE_SET_RADIO:    
+                    $child = $attributeCollection->findByName($values);
+                    $attributes[$attribute->getId()] = $child->getId();
+                    break;
+                case Attribute::TYPE_SET_CHECKBOX:
+                    $childNames = explode(',', $values);
                     foreach ($childNames as $childName) {
                         $child = $attributeCollection->findByName($childName);
-                        if ($child->getType() == Attribute::TYPE_RADIO) {
-                            $attributes[$attribute->getId()] = $child->getId();
-                        } elseif ($child->getType() == Attribute::TYPE_CHECKBOX) {
-                            $attributes[$child->getId()] = 1;
-                        }
+                        $attributes[$child->getId()] = 1;
                     }
                     break;
+                case Attribute::TYPE_CHECKBOX:
+                    $attributes[$attribute->getId()] = (int) $values;
+                    break;
                 default:
-                    $attributes[$attribute->getId()] = $row[$name];
+                    $attributes[$attribute->getId()] = $values;
             }
         }
         $this->productRepo->saveAttributes($productId, $attributes);

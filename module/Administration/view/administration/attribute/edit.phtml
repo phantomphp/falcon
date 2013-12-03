@@ -1,0 +1,66 @@
+<form class="alert-aware" method="post" action="#">
+    <input type="hidden" name="attribute[id]" value="<?php echo $this->attribute->getId(); ?>" />
+    <fieldset>
+        <legend><h3>Edit Attribute</h3></legend>
+        <div class="row">
+            <div class="large-2 columns">
+                <label class="inline">Name:</label>
+            </div>
+            <div class="large-10 columns">
+                <input type="text" name="attribute[label]" value="<?php echo $this->attribute->getLabel(); ?>" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="large-2 columns">
+                <label class="inline">Type:</label>
+            </div>
+            <div class="large-2 columns">
+                <select name="attribute[type]">
+                <?php
+                    foreach ($this->attribute_map as $key => $val) {
+                        $selected = '';
+                        if ($key == $this->attribute->getType()) {
+                            $selected = ' selected="selected"';
+                        }
+                        printf('<option value="%s"%s>%s</option>', $key, $selected, $val);
+                    }
+                ?>
+                </select>
+            </div>
+            <div class="large-8 columns">&nbsp;</div>
+        </div>
+
+        <h5>Options</h5>
+        <div id="attr-set">
+            <?php 
+            if ($this->attribute->hasChildren()) {
+                foreach ($this->attribute->getChildren() as $child) {
+                    printf('<label>Option: </label> <input type="text" name="attribute[options][%s]" value="%s">', $child->getId(), $child->getLabel());
+                }
+            }
+            ?>
+        </div>
+        <div class="row">
+            <div class="large-2 columns">
+                 <a href="#" class="tiny radius" onclick="return addAttrOption()"><i class="icon-plus-sign" ></i> add option</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="large-2 columns">
+                <label for="name" class="inline"></label>
+            </div>
+            <div class="large-10 columns">
+                <button id="submit" class="button radius">Save</button>
+                <button id="cancel" class="button radius secondary" onclick="parent.location.href='/administration/attribute/index'; return false;">Cancel</button>
+            </div>
+        </div>
+
+    </fieldset>
+</form>
+
+<script>
+    function addAttrOption(){
+        $("#attr-set").append('<label>Option: </label> <input type="text" name="attribute[new-options][]" >');
+        return false;
+    }
+</script>
