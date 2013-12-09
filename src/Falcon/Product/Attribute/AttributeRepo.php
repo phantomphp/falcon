@@ -104,4 +104,20 @@ class AttributeRepo implements RepositoryAwareInterface
         return $this->saveAttribute($attr);
     }
     
+    public function deleteAttribute($attrId)
+    {
+        $collection = $this->fetchAll();
+        $attr = $collection->findById($attrId);
+        if ($attr->hasChildren()) {
+            foreach ($attr->getChildren() as $child) {
+                $this->deleteAttribute($child->getId());
+            }
+        }
+        
+        $this->repository->delete('product_attribute', array('attribute_id' => $attrId));
+        $this->repository->delete('attribute', array('id' => $attrId));
+        
+        return true;
+    }
+    
 }

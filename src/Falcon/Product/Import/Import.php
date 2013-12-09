@@ -101,7 +101,11 @@ class Import implements ProductRepoAwareInterface, AttributeRepoAwareInterface
             if (empty($values)) {
                 continue;
             }
-            $attribute = $attributeCollection->findByName($attributeName);
+            try {
+                $attribute = $attributeCollection->findByName($attributeName);
+            } catch (\Exception $e) {
+                continue;
+            }
             switch ($attribute->getType()) {
                 case Attribute::TYPE_SELECT:
                 case Attribute::TYPE_SET_RADIO:    

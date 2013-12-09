@@ -1,5 +1,6 @@
 <div class="row alert-aware">
-    <table>
+    <h5>Attributes</h5>
+    <table width="100%">
         <thead>
             <tr>
                 <th>Name</th>
@@ -38,6 +39,7 @@
                 </td>
                 <td>
                     <a href="/administration/attribute/edit/<?php echo $attribute->getId(); ?>" class="tiny radius"> <i class="icon-pencil"></i> </a>
+                    <a onclick="return confirm('Are you sure?')" href="/administration/attribute/remove/<?php echo $attribute->getId(); ?>" class="tiny radius"> <i class="icon-remove"></i>
                 </td>
             </tr>
 <?php endforeach; ?>

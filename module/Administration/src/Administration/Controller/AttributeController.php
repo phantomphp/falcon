@@ -64,6 +64,14 @@ class AttributeController extends SecureController
         ));
     }
     
+    public function removeAction()
+    {
+        $id = $this->params('id');
+        ServiceManager::get('Product\Attribute\AttributeRepo')->deleteAttribute($id);
+        $this->flashMessenger()->addSuccessMessage('Attribute has been removed.');
+        return  $this->redirect()->toUrl('/administration/attribute/index');
+    }
+    
     protected function capturePostAndSave($redirectUrl = 'index')
     {
         if ($this->getRequest()->isPost()) {

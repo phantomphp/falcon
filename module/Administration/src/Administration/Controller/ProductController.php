@@ -33,9 +33,9 @@ class ProductController extends SecureController
     
     public function indexAction()
     {
-        $products = ServiceManager::get('Product\ProductRepo')->findAll();
         return new ViewModel(array(
-            'products' => $products
+            'products' => ServiceManager::get('Product\ProductRepo')->findAll(),
+            'attributes' => ServiceManager::get('Product\Attribute\AttributeRepo')->findAll(),
         ));
     }
     
