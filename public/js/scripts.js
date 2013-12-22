@@ -12,11 +12,13 @@ $(document).ready(function(){
             type: 'POST',
             dataType: 'JSON',
             success: function(data){
-                if (typeof onFormDataSuccess == 'function') {
+                if (data.error != '') {
+                    pushAlert(data.error, 'alert');
+                } else if (typeof onFormDataSuccess == 'function') {
                     onFormDataSuccess(data);
                 }
             },
-            error: function(){
+            error: function(data){
                 pushAlert('Form processing has been halted.', 'alert');
             },
             beforeSend: function(){

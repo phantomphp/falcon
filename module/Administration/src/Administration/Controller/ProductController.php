@@ -118,11 +118,17 @@ class ProductController extends SecureController
     public function importAction()
     {
         if ($this->getRequest()->isPost()) {
-            $file = $_FILES['file']['tmp_name'];
-            $import = ServiceManager::get('Product\Import\Import');
-            $import->setFile($file);
-            $result = $import->run();
-            echo json_encode(array('result' => $result));
+            $error = '';
+            $result = '';
+            try {
+                $file = $_FILES['file']['tmp_name'];
+                $import = ServiceManager::get('Product\Import\Import');
+                $import->setFile($file);
+                $result = $import->run();
+            } catch (\Exception $e) {
+                $error = $e->getMessage();
+            }
+            echo json_encode(array('result' => $result, 'error' => $error));
             exit;
         }
         
