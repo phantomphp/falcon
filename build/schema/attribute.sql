@@ -4,4 +4,4 @@ CREATE TABLE `attribute` (
   `label` varchar(64) DEFAULT NULL,
   `type` tinyint(4) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=UTF8
+) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
