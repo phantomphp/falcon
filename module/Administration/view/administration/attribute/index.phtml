@@ -1,5 +1,5 @@
 <div class="row alert-aware">
-    <h5>Attributes</h5>
+    <h5>Attributes <a href="/administration/attribute/new" class="tiny radius"> <i class="icon-plus-sign"></i> </a></h5>
     <table width="100%">
         <thead>
             <tr>
@@ -19,7 +19,7 @@
                     <?php echo $this->attribute_map[$attribute->getType()]; ?>
                 </td>
                 <td>
-    <?php 
+    <?php
         switch ($attribute->getType()) {
             case Falcon\Product\Attribute\Attribute::TYPE_TEXT:
             case Falcon\Product\Attribute\Attribute::TYPE_TEXTAREA:
