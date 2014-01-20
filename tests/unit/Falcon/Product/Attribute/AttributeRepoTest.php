@@ -10,7 +10,7 @@ class AttributeRepoTest extends ServiceManagerProviderTestCase
     {
         return $this->get('Product\Attribute\AttributeRepo');
     }
-    
+
     public function testInstance()
     {
         $repo = $this->getRepo();
@@ -22,25 +22,25 @@ class AttributeRepoTest extends ServiceManagerProviderTestCase
         $data = array(
             'id' => '20',
             'label' => 'Weight',
-            'type' => Attribute::TYPE_SET,
+            'type' => Attribute::TYPE_SET_CHECKBOX,
             'options' => null,
             'children' => array(
                 array(
                     'id' => '21',
                     'label' => 'Light',
-                    'type' => Attribute::TYPE_CHECKBOX
+                    'type' => Attribute::TYPE_OPTION
                 ),
                 array(
                     'id' => '22',
                     'label' => 'Medium',
-                    'type' => Attribute::TYPE_CHECKBOX
+                    'type' => Attribute::TYPE_OPTION
                 ),
                 array(
                     'id' => '23',
                     'label' => 'Heavy',
-                    'type' => Attribute::TYPE_CHECKBOX,
+                    'type' => Attribute::TYPE_OPTION,
                     'value' => 1
-                    
+
                 ),
             )
         );
@@ -55,12 +55,12 @@ class AttributeRepoTest extends ServiceManagerProviderTestCase
         $actual = $this->getRepo()->assembleAttribute($data);
         $this->assertEquals($expected, $actual);
     }
-    
+
     public function testFindAll()
     {
-        $attribute = new Attribute(30, 'Ages', Attribute::TYPE_SET);
-        $attribute->addChild(new Attribute(35, '15+', Attribute::TYPE_CHECKBOX));
-        $attribute->addChild(new Attribute(36, 'Adult', Attribute::TYPE_CHECKBOX));
+        $attribute = new Attribute(30, 'Ages', Attribute::TYPE_SET_CHECKBOX);
+        $attribute->addChild(new Attribute(35, '15+', Attribute::TYPE_OPTION));
+        $attribute->addChild(new Attribute(36, 'Adult', Attribute::TYPE_OPTION));
         $actual = $this->getRepo()->findAll();
         $collection = new AttributeCollection();
         $collection->add($attribute);

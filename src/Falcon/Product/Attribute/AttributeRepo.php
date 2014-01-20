@@ -8,12 +8,12 @@ use Falcon\Repository\RepositoryInterface;
 class AttributeRepo implements RepositoryAwareInterface
 {
     protected $repository;
-    
+
     public function setRepository(RepositoryInterface $repository)
     {
         $this->repository = $repository;
     }
-    
+
     public function assembleAttribute($data)
     {
         $attr = new Attribute($data['id'], $data['label'], $data['type']);
@@ -27,12 +27,12 @@ class AttributeRepo implements RepositoryAwareInterface
         }
         return $attr;
     }
-    
+
     public function findAll()
     {
         return $this->fetchAll();
     }
-    
+
     public function fetchAll()
     {
         $data = array();
@@ -47,7 +47,7 @@ class AttributeRepo implements RepositoryAwareInterface
                 $data[$record['id']] = $record;
             }
         }
-        
+
         foreach ($data as $attr) {
             $attributes->add($this->assembleAttribute($attr));
         }
@@ -55,7 +55,7 @@ class AttributeRepo implements RepositoryAwareInterface
         return $attributes;
     }
 
-    
+
     public function saveAttribute(Attribute $attr, $parentId = null)
     {
         $data = array(
@@ -66,29 +66,32 @@ class AttributeRepo implements RepositoryAwareInterface
         if ($parentId) {
             $data['parent_id'] = $parentId;
         }
-        
+
         if ($attr->getId()) {
             $this->repository->update('attribute', $data, array('id' => $attr->getId()));
             $parentId = $attr->getId();
         } else {
             $parentId = $this->repository->insert('attribute', $data);
         }
-        
+
         if ($attr->hasChildren()) {
             foreach ($attr->getChildren() as $child) {
                 $this->saveAttribute($child, $parentId);
             }
         }
-        
+
         return true;
     }
-    
+
     public function save($data)
     {
         $attr = new Attribute($data['id'], $data['label'], $data['type']);
         if(in_array($data['type'], array(Attribute::TYPE_SET_RADIO, Attribute::TYPE_SET_CHECKBOX, Attribute::TYPE_SELECT))) {
             if (isset($data['new-options'])) {
                 foreach ($data['new-options'] as $option) {
+                    if (trim($option) === '') {
+                        continue;
+                    }
                     $child = new Attribute(0, $option, Attribute::TYPE_OPTION);
                     $attr->addChild($child);
                 }
@@ -100,10 +103,10 @@ class AttributeRepo implements RepositoryAwareInterface
                 }
             }
         }
-        
+
         return $this->saveAttribute($attr);
     }
-    
+
     public function deleteAttribute($attrId)
     {
         $collection = $this->fetchAll();
@@ -113,11 +116,11 @@ class AttributeRepo implements RepositoryAwareInterface
                 $this->deleteAttribute($child->getId());
             }
         }
-        
+
         $this->repository->delete('product_attribute', array('attribute_id' => $attrId));
         $this->repository->delete('attribute', array('id' => $attrId));
-        
+
         return true;
     }
-    
+
 }
